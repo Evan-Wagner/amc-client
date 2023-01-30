@@ -1,7 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
+import { getRecords, addRecord } from './utils';
 
 function App() {
+  console.log(process.env.AIRTABLE_API_KEY);
+  
   return (
     <div className="App">
       <header className="App-header">
