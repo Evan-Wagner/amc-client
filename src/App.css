@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  padding: 1em;
 }
 
 .App-logo {
@@ -14,25 +14,26 @@
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 35vh;
+  text-align: center;
+  background-color: lavender;
+  padding: 1em;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: black;
+  outline: 1px solid black;
 }
 
 .App-body {
-  background-color: whitesmoke;
+  background-color: rgb(252, 243, 230);
   min-height: 35vh;
   display: flex;
   flex-direction: column;
   align-items: left;
   text-align: left;
-  margin-left: .5in;
-  margin-right: .5in;
   justify-content: left;
   font-size: calc(10px + 2vmin);
 }
@@ -41,10 +42,42 @@
   color: #61dafb;
 }
 
-table, th, td {
-  background-color: rgb(252, 243, 230);
-  border: 1px solid white;
+body {
+  background-color: rgb(255, 241, 219);
+}
+
+h3 {
   text-align: left;
+  grid-column: 1 / 2;
+}
+
+table, th, td {
+  background-color: lavender;
+  outline: 1px solid black;
+  text-align: left;
+  padding: .25em;
+}
+
+form {
+  background-color: lavender;
+  outline: 1px solid black;
+  margin-bottom: 1em;
+  display: grid;
+  grid-template-columns: max-content auto;
+  gap: .5em;
+  padding: 1em;
+  width: fit-content;
+}
+
+form label {
+  grid-column: 1 / 2;
+  text-align: left;
+}
+
+form input {
+  grid-column: 2 / 3;
+  text-align: left;
+  width: fit-content;
 }
 
 @keyframes App-logo-spin {
@@ -54,4 +87,22 @@ table, th, td {
   to {
     transform: rotate(360deg);
   }
+}
+
+.tab-list {
+  border-bottom: 1px solid black;
+  padding-left: 0;
+}
+
+.tab-list-item {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: -1px;
+  padding: 0.5rem 0.75rem;
+}
+
+.tab-list-active {
+  background-color: lavender;
+  border: solid black;
+  border-width: 1px 1px 0 1px;
 }
