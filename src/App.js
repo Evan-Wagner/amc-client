@@ -15,25 +15,13 @@ function App() {
 
   const [expired, setExpired] = useState(false);
 
-  const addTrackFromSpotifyUrl = async (url) => {
-    const trackId = parseTrackIdFromSpotifyUrl(url);
-
-    const json = await getTrack(trackId, token);
-
-    const response = await addRecords(baseId, longlistTableId, {
-      'title': json.name,
-      'spotifyUrl': url
-    });
-
-    return response;
-  }
-
   useEffect(() => {
     // cache token
     const hash = window.location.hash;
     let token = window.localStorage.getItem("token");
+    // let expired = window.localStorage.getItem("expired");
 
-    if ((!token | expired) && hash) {
+    if (hash) {
       token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1];
       
       window.location.hash = "";
@@ -46,6 +34,20 @@ function App() {
     // setNotAllowed("not_allowed")
     // setExpired("expired")
   }, [])
+
+  const addTrackFromSpotifyUrl = async (url) => {
+
+    const trackId = url ? parseTrackIdFromSpotifyUrl(url) : null;
+
+    const json = trackId ? await getTrack(trackId, token) : null;
+
+    const response = json ? await addRecords(baseId, longlistTableId, [{
+      'title': json.name,
+      'spotifyUrl': url
+    }]) : null;
+
+    return response;
+  }
 
   const [longlistJson, setLonglist] = useState(null);
 
@@ -72,7 +74,9 @@ function App() {
       });
     }
     
-    handleSubmit(event) {
+    async handleSubmit(event) {
+      event.preventDefault();
+
       this.setState({
         responseMsg: 'Loading...',
       });
@@ -86,18 +90,20 @@ function App() {
           responseMsg: 'Token expired, please authenticate again.'
         });
       } else if (this.state.spotifyUrl != '') {
-        addTrackFromSpotifyUrl(this.state.spotifyUrl).then((response) => {
+        try {
+          await addTrackFromSpotifyUrl(this.state.spotifyUrl);
+          await loadLonglistRecords();
           this.setState({
             responseMsg: 'Track added successfully!'
           });
-        }).catch((err) => {
-          if (err.response.status === 401) {
+        } catch (err) {
+          if (err.error && err.error.status === 401) {
             setExpired(true);
           }
           this.setState({
             responseMsg: ''+err.toString()
           });
-        })
+        }
       } else if (this.state.youtubeUrl != '') {
         this.setState({
           responseMsg: 'Youtube functionality pending.'
@@ -107,10 +113,6 @@ function App() {
           responseMsg: 'Please include at least one link.'
         });
       }
-
-      // loadLonglistRecords();
-    
-      event.preventDefault();
     }
 
     render() {
@@ -133,8 +135,8 @@ function App() {
     }
 
     handleSubmit(event) {
-      loadLonglistRecords();
       event.preventDefault();
+      loadLonglistRecords();
     }
 
     render() {
