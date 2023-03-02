@@ -205,7 +205,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>Async Music Collab</h1>
-        <a href={`https://accounts.spotify.com/authorize?client_id=${env.SPOTIFY_CLIENT_ID}&redirect_uri=${env.SPOTIFY_RED_URI}&response_type=token&scope=user-top-read user-read-currently-playing`}>Authorize Spotify</a>
+        <a href={`https://accounts.spotify.com/authorize?client_id=${env.SPOTIFY_CLIENT_ID}&redirect_uri=${redirect_uri}&response_type=token&scope=user-top-read user-read-currently-playing`}>Authorize Spotify</a>
         {/* Dev message: {devMsg} <br /> */}
         {/* Spotify token: {token} <br /> */}
       </header>
