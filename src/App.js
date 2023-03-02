@@ -18,6 +18,7 @@ function App() {
 
   const [expired, setExpired] = useState(false);
 
+  // handle login
   useEffect(() => {
     // cache token
     const hash = window.location.hash;
