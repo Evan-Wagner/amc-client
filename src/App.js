@@ -10,6 +10,8 @@ import { getTrack, getCurrentTrack, parseTrackIdFromSpotifyUrl } from './spotify
 const baseId = 'appkuUbZ5RipsMM6I';
 const longlistTableId = 'tbl53wHMzfQksGi3c';
 
+const redirect_uri = env.REACT_ENV === 'dev' ? 'http://localhost:3000' : 'https://async-music-collab.vercel.app/';
+
 function App() {
 
   const [token, setToken] = useState("");
