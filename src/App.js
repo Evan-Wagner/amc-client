@@ -1,16 +1,23 @@
+import React, { useState, useEffect } from 'react';
 import env from 'react-dotenv';
 
-import logo from './logo.svg';
 import './App.css';
-import React, { useState, useEffect } from 'react';
 import Tabs from './components/Tabs';
-import { getBases, getRecords, addRecords } from './airtableUtils';
-import { getTrack, getCurrentTrack, parseTrackIdFromSpotifyUrl } from './spotifyUtils';
+import {
+  parseStreamingSource,
+  getSpotifyTrack,
+  getSpotifyCurrentTrack,
+  parseSpotifyTrackIdFromUrl
+} from './streamingUtils';
+import {
+  insertTune,
+  getAllTunes,
+  updateTuneById,
+  deleteTuneById,
+  getTuneById
+} from './apis/tune-api';
 
-const baseId = 'appkuUbZ5RipsMM6I';
-const longlistTableId = 'tbl53wHMzfQksGi3c';
-
-const redirect_uri = env.REACT_ENV === 'dev' ? 'http://localhost:3000' : 'https://async-music-collab.vercel.app/';
+const redirect_uri = env.REACT_ENV === 'dev' ? `http://localhost:${env.PORT}/` : 'https://async-music-collab.vercel.app/';
 
 function App() {
 
@@ -39,45 +46,44 @@ function App() {
     // setExpired("expired")
   }, [])
 
-  const [longlistJson, setLonglist] = useState(null);
+  const [brainstormJson, setBrainstorm] = useState(null);
 
-  const [devMsg, setDevMsg] = useState(null);
+  const loadBrainstormTunes = async () => {
+    const tunes = await getAllTunes();
+    setBrainstorm(tunes.data);
+  };
 
-  const loadLonglistRecords = async () => {
-    const recordsJson = await getRecords(baseId, longlistTableId);
-    setLonglist(recordsJson);
-  }
+  const addTune = async (name, streamingUrls) => {
+    const parsedUrls = streamingUrls.map((url) => [url, parseStreamingSource(url)]);
+    await insertTune({ name, streamingUrls: parsedUrls, endorsements: [] });
+    loadBrainstormTunes();
+  };
+
 
   const addTrackFromSpotifyUrl = async (url) => {
-    const trackId = url ? parseTrackIdFromSpotifyUrl(url) : null;
+    const trackId = url ? parseSpotifyTrackIdFromUrl(url) : null;
+    const json = trackId ? await getSpotifyTrack(trackId, token) : null;
 
-    const json = trackId ? await getTrack(trackId, token) : null;
-
-    const response = json ? await addRecords(baseId, longlistTableId, [{
-      'title': json.name,
-      'spotifyUrl': url
-    }]) : null;
-
-    return response;
-  }
+    if (json) {
+      await addTune(json.name, [url]);
+    }
+  };
 
   const addTrackFromCurrent = async () => {
-    const json = await getCurrentTrack(token);
+    const json = await getSpotifyCurrentTrack(token);
 
-    const response = json ? await addRecords(baseId, longlistTableId, [{
-      'title': json.item.name,
-      'spotifyUrl': json.item.external_urls.spotify
-    }]) : null;
+    if (json) {
+      await addTune(json.item.name, [json.item.external_urls.spotify]);
+    }
+  };
 
-    return response;
-  }
-
-  class AddToLonglistForm extends React.Component {
+  class AddToBrainstormForm extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {trackTitle: '', spotifyUrl: '', youtubeUrl: '', responseMsg: ''};
+      this.state = {name: '', spotifyUrl: '', youtubeUrl: '', responseMsg: ''};
       this.handleChange = this.handleChange.bind(this);
       this.handleSubmit = this.handleSubmit.bind(this);
+      this.handleSubmitCurrent = this.handleSubmitCurrent.bind(this);
     }
   
     handleChange(event) {
@@ -93,14 +99,14 @@ function App() {
         responseMsg: 'Loading...',
       });
 
-      if (token == '') {
+      if (token === '') {
         this.setState({
           responseMsg: 'Please authenticate Spotify.'
         });
-      } else if (this.state.spotifyUrl != '') {
+      } else if (this.state.spotifyUrl !== '') {
         try {
           await addTrackFromSpotifyUrl(this.state.spotifyUrl);
-          await loadLonglistRecords();
+          await loadBrainstormTunes();
           this.setState({
             responseMsg: 'Track added successfully.'
           });
@@ -109,7 +115,7 @@ function App() {
             responseMsg: ''+err.toString()
           });
         }
-      } else if (this.state.youtubeUrl != '') {
+      } else if (this.state.youtubeUrl !== '') {
         this.setState({
           responseMsg: 'Youtube functionality pending.'
         });
@@ -127,14 +133,14 @@ function App() {
       //   responseMsg: 'Loading...',
       // });
 
-      if (token == '') {
+      if (token === '') {
         this.setState({
           responseMsg: 'Please authenticate Spotify.'
         });
       } else {
         try {
           await addTrackFromCurrent();
-          await loadLonglistRecords();
+          await loadBrainstormTunes();
           this.setState({
             responseMsg: 'Track added successfully!'
           });
@@ -149,7 +155,7 @@ function App() {
     render() {
       return (
         <form onSubmit={this.handleSubmit}>
-          <h3>Add to Longlist</h3> {this.state.responseMsg}<br />
+          <h3>Add to Brainstorm</h3> {this.state.responseMsg}<br />
           <input type="button" name="fromCurrent" value="Get currently playing Spotify track" onClick={this.handleSubmitCurrent}/><br />
           <label>Or paste Spotify link: </label><input type="text" name="spotifyUrl" value={this.state.spotifyUrl} onChange={this.handleChange} /><br />
           <label>and/or Youtube link: </label><input type="text" name="youtubeUrl" value={this.state.youtubeUrl} onChange={this.handleChange} /><br />
@@ -159,7 +165,7 @@ function App() {
     }
   }
 
-  class ShowLonglistButton extends React.Component {
+  class ShowBrainstormButton extends React.Component {
     constructor(props) {
       super(props);
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -167,40 +173,58 @@ function App() {
 
     handleSubmit(event) {
       event.preventDefault();
-      loadLonglistRecords();
+      loadBrainstormTunes();
     }
 
     render() {
-      return !longlistJson && (
+      return !brainstormJson && (
         <form onSubmit={this.handleSubmit}>
-          <input type="submit" value="Show Longlist" />
+          <input type="submit" value="Show Brainstorm" />
         </form>
       )
     }
   }
 
-  class LonglistTable extends React.Component {
+  class BrainstormTable extends React.Component {
     render() {
-      return longlistJson && (
+      return brainstormJson && (
         <table>
           <tr>
-            <th>Title</th>
+            <th>Name</th>
             <th>Links</th>
             <th>Notes</th>
           </tr>
-          {longlistJson ? longlistJson.records.map(record => {
+          {brainstormJson ? brainstormJson.map(record => {
             return (
               <tr>
-                <td>{record.fields.title}</td>
-                <td><a href={record.fields.spotifyUrl} target="_blank" rel="noreferrer">Spotify</a> • <a href={record.fields.youtubeUrl} target="_blank" rel="noreferrer">Youtube</a> • <a href={record.fields.appleUrl} target="_blank" rel="noreferrer">Apple</a> • <a href={record.fields.otherUrl} target="_blank" rel="noreferrer">Other</a></td>
-                <td>{record.fields.notes}</td>
+                <td>{record.name}</td>
+                <td>
+                  {record.streamingUrls.map((urlTuple, index) => (
+                    <React.Fragment key={index}>
+                      <a
+                        key={index}
+                        className="streaming-link"
+                        href={urlTuple[0]}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {urlTuple[1]}
+                      </a>
+                      {index !== record.streamingUrls.length - 1 && (
+                        <span className="dot"> • </span>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </td>
+                <td>{record.notes}</td>
               </tr>
-            )
+            );
           }) : null}
         </table>
-      )
+      );
     }
   }
+  
   
   return (
     <div className="App">
@@ -210,14 +234,16 @@ function App() {
         {/* Dev message: {devMsg} <br /> */}
         {/* Spotify token: {token} <br /> */}
       </header>
-      <body>
         <Tabs>
-          <div label="Longlist">
-          <AddToLonglistForm />
-          <ShowLonglistButton />
-          <LonglistTable />
+          <div label="Brainstorm">
+          <AddToBrainstormForm />
+          <ShowBrainstormButton />
+          <BrainstormTable />
           </div>
           <div label="Shortlist">
+            TBD
+          </div>
+          <div label="Repertoire">
             TBD
           </div>
           <div label="Setlists">
@@ -226,9 +252,10 @@ function App() {
           <div label="Scheduling">
             TBD
           </div>
+          <div label="Settle Up">
+            TBD
+          </div>
         </Tabs>
-        
-      </body>
     </div>
   );
 }

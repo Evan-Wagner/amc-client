@@ -1,6 +1,19 @@
 import env from 'react-dotenv';
 
-export const getTrack = async (trackId, token) => {
+export const parseStreamingSource = (url) => {
+    if (url.includes('spotify.com')) {
+      return 'spotify';
+    } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      return 'youtube';
+    } else if (url.includes('music.apple.com')) {
+      return 'apple';
+    } else {
+      return 'unknown';
+    }
+  };
+  
+
+export const getSpotifyTrack = async (trackId, token) => {
     const url = `https://api.spotify.com/v1/tracks/${trackId}`;
 
     const response = await fetch(url, {
@@ -18,7 +31,7 @@ export const getTrack = async (trackId, token) => {
     return await response.json();
 }
 
-export const getCurrentTrack = async (token) => {
+export const getSpotifyCurrentTrack = async (token) => {
     const url = `https://api.spotify.com/v1/me/player/currently-playing`;
 
     const response = await fetch(url, {
@@ -38,7 +51,7 @@ export const getCurrentTrack = async (token) => {
     return await response.json();
 }
 
-export const parseTrackIdFromSpotifyUrl = (url) => {
+export const parseSpotifyTrackIdFromUrl = (url) => {
     if (!url) {
         throw new Error('No URL provided');
     }
