@@ -110,3 +110,66 @@ form input {
 .streaming-link {
   text-transform: capitalize;
 }
+
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.navigation ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.navigation li {
+  font-size: 14px;
+}
+
+.navigation a {
+  text-decoration: none;
+}
+
+.navigation a:hover {
+  text-decoration: underline;
+}
+
+.navigation .dot {
+  margin: 0 10px;
+}
+
+.authorize-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #1DB954;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.authorize-button:hover {
+  background-color: #1ED760;
+}
+
+.authorize-button:active {
+  background-color: #1DB954;
+}
+
+.authorize-button:disabled {
+  background-color: #7f8c8d;
+  cursor: not-allowed;
+}
+
+.authorized {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2ecc71;
+  color: white;
+}
