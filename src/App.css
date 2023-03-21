@@ -2,17 +2,6 @@
   padding: 1em;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
   text-align: center;
   background-color: lavender;
@@ -38,10 +27,6 @@
   font-size: calc(10px + 2vmin);
 }
 
-.App-link {
-  color: #61dafb;
-}
-
 body {
   background-color: rgb(255, 241, 219);
 }
@@ -62,11 +47,20 @@ form {
   background-color: lavender;
   outline: 1px solid black;
   margin-bottom: 1em;
-  display: grid;
-  grid-template-columns: max-content auto;
-  gap: .5em;
   padding: 1em;
   width: fit-content;
+}
+
+.form-content {
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+  gap: .5em;
+}
+
+form span.responseMsg {
+  grid-column: 1 / 2;
+  grid-row: 1;
+  text-align: left;
 }
 
 form label {
@@ -74,10 +68,54 @@ form label {
   text-align: left;
 }
 
-form input {
-  grid-column: 2 / 3;
+form input[type="text"] {
+  grid-column: 1 / 2;
   text-align: left;
-  width: fit-content;
+  width: 100%;
+}
+
+.add-spotify-current-button {
+  grid-column: 1 / 2;
+  padding: 10px 20px;
+  width: 100%;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #1DB954;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-spotify-current-button:hover {
+  background-color: #1ED760;
+}
+
+.add-url-button {
+  grid-column: 1 / 2;
+  width: 100%;
+  background-color: #808080;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-url-button:hover {
+  background-color: #1ED760;
+}
+
+.remove-url-button {
+  grid-column: 2 / 3;
+  background-color: #808080;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 2em;
+  height: 2em;
+}
+
+.remove-url-button:hover {
+  background-color: #FF4136;
 }
 
 @keyframes App-logo-spin {

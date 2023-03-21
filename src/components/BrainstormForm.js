@@ -1,116 +1,131 @@
-import React from 'react';
-import { parseStreamingSource } from '../streamingUtils';
+import React, { useState } from 'react';
+import { parseStreamingSource, getSpotifyTrack, getSpotifyCurrentTrack, parseSpotifyTrackIdFromUrl } from '../streamingUtils';
+import { insertTune } from '../apis/tunes-api';
 
-const addTune = async (name, streamingUrls) => {
-    const parsedUrls = streamingUrls.map((url) => [url, parseStreamingSource(url)]);
-    await insertTune({ name, streamingUrls: parsedUrls, endorsements: [] });
-    loadBrainstormTunes();
+const BrainstormForm = ({ token, loadBrainstormTunes }) => {
+  const [state, setState] = useState({
+    name: '',
+    urls: [],
+    responseMsg: '',
+  });
+
+  const handleChange = (event, index) => {
+    const newUrls = [...state.urls];
+    newUrls[index] = event.target.value;
+    setState({ ...state, urls: newUrls });
   };
 
+  const addUrlInput = () => {
+    if (state.urls.length < 6) {
+      setState({ ...state, urls: [...state.urls, ''] });
+    }
+  };
+  
+  const removeUrlInput = (index) => {
+    const newUrls = state.urls.filter((_, i) => i !== index);
+    setState({ ...state, urls: newUrls });
+  };
+
+  const addTrackFromSpotifyCurrent = async () => {
+    console.log('token',token);
+    if (token == '') {
+      setState({ ...state, responseMsg: 'Please authenticate Spotify.'});
+    } else {
+      try {
+        const json = await getSpotifyCurrentTrack(token);
+
+        if (json) {
+          const parsedUrls = [[json.item.external_urls.spotify, 'spotify']];
+            await insertTune({ name: json.item.name, streamingUrls: parsedUrls, endorsements: [] });
+            loadBrainstormTunes();
+        }
+      } catch (err) {
+        setState({ ...state, responseMsg: '' + err.toString() });
+      }
+    }
+  };
 
   const addTrackFromSpotifyUrl = async (url) => {
     const trackId = url ? parseSpotifyTrackIdFromUrl(url) : null;
     const json = trackId ? await getSpotifyTrack(trackId, token) : null;
 
     if (json) {
-      await addTune(json.name, [url]);
+      const parsedUrls = [[url, 'spotify']];
+      await insertTune({ name: json.name, streamingUrls: parsedUrls, endorsements: [] });
     }
   };
 
-  const addTrackFromCurrent = async () => {
-    const json = await getSpotifyCurrentTrack(token);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const validUrls = state.urls.filter((url) => url !== '');
+    if (validUrls.length > 0) {
+      setState({ ...state, responseMsg: 'Loading...' });
 
-    if (json) {
-      await addTune(json.item.name, [json.item.external_urls.spotify]);
+      for (const url of validUrls) {
+        const source = parseStreamingSource(url);
+        if (source === 'spotify') {
+          if (token == '') {
+            setState({ ...state, responseMsg: 'Please authenticate Spotify.'});
+          } else {
+            try {
+              await addTrackFromSpotifyUrl(url);
+              setState({ ...state, responseMsg: 'Track successfully added.'});
+            } catch (err) {
+              setState({ ...state, responseMsg: '' + err.toString() });
+            }
+          }
+        } else if (source === 'youtube' || source === 'apple') {
+          setState({ ...state, responseMsg: `${source} functionality pending.` });
+        } else {
+          setState({ ...state, responseMsg: 'Unknown URL source.' });
+        }
+      }
+
+      loadBrainstormTunes();
+    } else {
+      setState({ ...state, responseMsg: 'Please include at least one link.' });
     }
   };
 
-  class AddToBrainstormForm extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {name: '', spotifyUrl: '', youtubeUrl: '', responseMsg: ''};
-      this.handleChange = this.handleChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleSubmitCurrent = this.handleSubmitCurrent.bind(this);
-    }
-  
-    handleChange(event) {
-      this.setState({
-        [event.target.name]: event.target.value
-      });
-    }
-    
-    async handleSubmit(event) {
-      event.preventDefault();
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="form-content">
+        <span className="responseMsg">{state.responseMsg}</span><br />
+        <input
+          type="button"
+          className="add-spotify-current-button"
+          name="fromCurrent"
+          value="Get currently playing Spotify track"
+          onClick={addTrackFromSpotifyCurrent}
+        />
+        {state.urls.map((url, index) => (
+          <React.Fragment key={index}>
+            <input
+              type="text"
+              name={`url${index}`}
+              value={url}
+              onChange={(e) => handleChange(e, index)}
+            />
+            <input
+              type="button"
+              className="remove-url-button"
+              value="-"
+              onClick={() => removeUrlInput(index)}
+            />
+            <br />
+          </React.Fragment>
+        ))}
+        { state.urls.length < 6 ? <input
+          type="button"
+          className="add-url-button"
+          value={state.urls.length === 0 ? 'Paste streaming link(s)' : '+'}
+          onClick={addUrlInput}
+        /> : ''}
+        <br />
+        <input type="submit" name="fromUrl" value="Submit" />
+      </div>
+    </form>
+  );
+};
 
-      this.setState({
-        responseMsg: 'Loading...',
-      });
-
-      if (token === '') {
-        this.setState({
-          responseMsg: 'Please authenticate Spotify.'
-        });
-      } else if (this.state.spotifyUrl !== '') {
-        try {
-          await addTrackFromSpotifyUrl(this.state.spotifyUrl);
-          await loadBrainstormTunes();
-          this.setState({
-            responseMsg: 'Track added successfully.'
-          });
-        } catch (err) {
-          this.setState({
-            responseMsg: ''+err.toString()
-          });
-        }
-      } else if (this.state.youtubeUrl !== '') {
-        this.setState({
-          responseMsg: 'Youtube functionality pending.'
-        });
-      } else {
-        this.setState({
-          responseMsg: 'Please include at least one link.'
-        });
-      }
-    }
-
-    async handleSubmitCurrent(event) {
-      event.preventDefault();
-
-      // this.setState({
-      //   responseMsg: 'Loading...',
-      // });
-
-      if (token === '') {
-        this.setState({
-          responseMsg: 'Please authenticate Spotify.'
-        });
-      } else {
-        try {
-          await addTrackFromCurrent();
-          await loadBrainstormTunes();
-          this.setState({
-            responseMsg: 'Track added successfully!'
-          });
-        } catch (err) {
-          this.setState({
-            responseMsg: ''+err.toString()
-          });
-        }
-      }
-    }
-
-    render() {
-      return (
-        <form onSubmit={this.handleSubmit}>
-          <h3>Add to Brainstorm</h3> {this.state.responseMsg}<br />
-          <input type="button" name="fromCurrent" value="Get currently playing Spotify track" onClick={this.handleSubmitCurrent}/><br />
-          <label>Or paste Spotify link: </label><input type="text" name="spotifyUrl" value={this.state.spotifyUrl} onChange={this.handleChange} /><br />
-          <label>and/or Youtube link: </label><input type="text" name="youtubeUrl" value={this.state.youtubeUrl} onChange={this.handleChange} /><br />
-          <input type="submit" name="fromUrl" value="Submit" />
-        </form>
-      );
-    }
-  }
-
-export default AddToBrainstormForm;
+export default BrainstormForm;

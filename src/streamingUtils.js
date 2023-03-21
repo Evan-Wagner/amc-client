@@ -1,16 +1,15 @@
-import env from 'react-dotenv';
 
 export const parseStreamingSource = (url) => {
     if (url.includes('spotify.com')) {
-      return 'spotify';
+        return 'spotify';
     } else if (url.includes('youtube.com') || url.includes('youtu.be')) {
-      return 'youtube';
+        return 'youtube';
     } else if (url.includes('music.apple.com')) {
-      return 'apple';
+        return 'apple';
     } else {
-      return 'unknown';
+        return 'unknown';
     }
-  };
+};
   
 
 export const getSpotifyTrack = async (trackId, token) => {
