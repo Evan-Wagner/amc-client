@@ -29,7 +29,10 @@ const TunesPage = ({ token }) => {
           token={token}
           loadBrainstormTunes={loadBrainstormTunes}
         />
-        <BrainstormTable brainstormJson={brainstormJson} />
+        <BrainstormTable
+          brainstormJson={brainstormJson}
+          loadBrainstormTunes={loadBrainstormTunes}
+        />
       </div>
       <div label="Shortlist">TBD</div>
       <div label="Repertoire">TBD</div>

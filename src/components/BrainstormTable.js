@@ -1,6 +1,19 @@
 import React from 'react';
+import { updateTuneById, deleteTuneById } from '../apis/tunes-api';
 
-const BrainstormTable = ({ brainstormJson }) => {
+const BrainstormTable = ({ brainstormJson, loadBrainstormTunes }) => {
+  const handleEdit = async (id) => {
+    // Implement the edit functionality here, e.g., opening a modal to edit the record
+    // Once the modal is submitted, call updateTuneById with the new data
+    // await updateTuneById(id, updatedPayload);
+    // loadBrainstormTunes();
+  };
+
+  const handleDelete = async (id) => {
+    await deleteTuneById(id);
+    loadBrainstormTunes();
+  };
+
   return (
     brainstormJson && (
       <table>
@@ -9,11 +22,12 @@ const BrainstormTable = ({ brainstormJson }) => {
             <th>Name</th>
             <th>Links</th>
             <th>Notes</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {brainstormJson.map((record) => (
-            <tr>
+            <tr key={record._id}>
               <td>{record.name}</td>
               <td>
                 {record.streamingUrls.map((urlTuple, index) => (
@@ -32,6 +46,10 @@ const BrainstormTable = ({ brainstormJson }) => {
                 ))}
               </td>
               <td>{record.notes}</td>
+              <td>
+                <button onClick={() => handleEdit(record._id)}>Edit</button>
+                <button onClick={() => handleDelete(record._id)}>Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -39,5 +57,6 @@ const BrainstormTable = ({ brainstormJson }) => {
     )
   );
 };
+
 
 export default BrainstormTable;
