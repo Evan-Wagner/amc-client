@@ -33,7 +33,7 @@ body {
 
 h3 {
   text-align: left;
-  grid-column: 1 / 2;
+  font-weight: bold;
 }
 
 table, th, td {
@@ -41,6 +41,90 @@ table, th, td {
   outline: 1px solid black;
   text-align: left;
   padding: .25em;
+}
+
+.brainstorm-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.tune-row {
+  display: flex;
+  background-color: lavender;
+  border: 1px solid black;
+}
+
+.tune-row-expand {
+  display: flex;
+  background-color: lavender;
+  border: 1px solid black;
+  height: 12em;
+}
+
+.tune-cell {
+  padding: 8px;
+  margin-right: 8px;
+  display: flex;
+  align-items: flex-start;
+  vertical-align: top;
+}
+
+.tune-divider {
+  height: 2em;
+  width: 2px;
+  border-left: 1px solid gray;
+  display: flex;
+}
+
+.tune-details {
+  flex: 1;
+  flex-direction: column;
+}
+
+.tune-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tune-streaming-links {
+  flex: 1;
+}
+
+.tune-description {
+  flex: 2;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tune-description-expand {
+  flex: 2;
+  overflow-y: scroll;
+}
+
+.tune-endorsements {
+  flex: 0.5;
+}
+
+.tune-actions {
+  flex: 1;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.tune-actions button {
+  margin-bottom: 8px;
+}
+
+.streaming-link {
+  color: inherit;
+  color: blue;
+  text-decoration: underline;
+  text-transform: capitalize;
+}
+
+.dot {
+  margin: 0 4px;
 }
 
 form {
@@ -145,7 +229,7 @@ form input[type="text"] {
   border-width: 1px 1px 0 1px;
 }
 
-.streaming-link {
+.tune-streaming-link {
   text-transform: capitalize;
 }
 

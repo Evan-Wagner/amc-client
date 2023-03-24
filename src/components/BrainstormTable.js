@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Tune from './Tune';
+import TuneExpand from './TuneExpand';
+import TuneEdit from './TuneEdit';
 import { updateTuneById, deleteTuneById } from '../apis/tunes-api';
 
 const BrainstormTable = ({ brainstormJson, loadBrainstormTunes }) => {
-  const handleEdit = async (id) => {
-    // Implement the edit functionality here, e.g., opening a modal to edit the record
-    // Once the modal is submitted, call updateTuneById with the new data
-    // await updateTuneById(id, updatedPayload);
-    // loadBrainstormTunes();
+  const [expandedTuneId, setExpandedTuneId] = useState(null);
+  const [editingTuneId, setEditingTuneId] = useState(null);
+
+  const handleEdit = (id) => {
+    setEditingTuneId(id);
+  };
+
+  const handleSave = async (updatedRecord) => {
+    await updateTuneById(updatedRecord._id, updatedRecord);
+    loadBrainstormTunes();
+    setEditingTuneId(null);
   };
 
   const handleDelete = async (id) => {
@@ -14,49 +23,52 @@ const BrainstormTable = ({ brainstormJson, loadBrainstormTunes }) => {
     loadBrainstormTunes();
   };
 
+  const handleExpand = (id) => {
+    setExpandedTuneId(expandedTuneId === id ? null : id);
+  };
+
   return (
     brainstormJson && (
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Links</th>
-            <th>Notes</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {brainstormJson.map((record) => (
-            <tr key={record._id}>
-              <td>{record.name}</td>
-              <td>
-                {record.streamingUrls.map((urlTuple, index) => (
-                  <React.Fragment key={index}>
-                    <a
-                      key={index}
-                      className="streaming-link"
-                      href={urlTuple[0]}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {urlTuple[1]}
-                    </a>
-                    {index !== record.streamingUrls.length - 1 && <span className="dot"> • </span>}
-                  </React.Fragment>
-                ))}
-              </td>
-              <td>{record.notes}</td>
-              <td>
-                <button onClick={() => handleEdit(record._id)}>Edit</button>
-                <button onClick={() => handleDelete(record._id)}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="brainstorm-table">
+        {brainstormJson.map((record) => {
+          const isExpanded = record._id === expandedTuneId;
+          const isEditing = record._id === editingTuneId;
+
+          if (isEditing) {
+            return (
+              <TuneEdit
+                key={record._id}
+                record={record}
+                handleSave={handleSave}
+                handleDelete={handleDelete}
+                handleCollapse={() => handleExpand(record._id)}
+              />
+            );
+          } else if (isExpanded) {
+            return (
+              <TuneExpand
+                key={record._id}
+                record={record}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                handleCollapse={() => handleExpand(record._id)}
+              />
+            );
+          } else {
+            return (
+              <Tune
+                key={record._id}
+                record={record}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+                handleExpand={() => handleExpand(record._id)}
+              />
+            );
+          }
+        })}
+      </div>
     )
   );
-};
-
+}
 
 export default BrainstormTable;
