@@ -1,0 +1,17 @@
+.theme-spotify-purple {
+    --color-primary: rgb(47, 26, 69);
+    --color-secondary: rgb(50, 48, 44);
+    --font-color-primary: whitesmoke;
+    --font-color-secondary: whitesmoke;
+    --line-color: whitesmoke;
+    --link-color: rgb(198, 156, 244);
+  }
+  
+  .theme-fender-red {
+    --color-primary: rgb(146, 31, 54);
+    --color-secondary: rgb(255, 230, 180);
+    --font-color-primary: whitesmoke;
+    --font-color-secondary: black;
+    --line-color: black;
+    --link-color: rgb(230, 106, 131);
+  }
