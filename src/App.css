@@ -4,7 +4,7 @@
 
 .App-header {
   text-align: center;
-  background-color: lavender;
+  background-color: rgb(47, 26, 69);
   padding: 1em;
   height: fit-content;
   display: flex;
@@ -12,12 +12,12 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: black;
-  outline: 1px solid black;
+  color: whitesmoke;
+  outline: 1px solid whitesmoke;
 }
 
 .App-body {
-  background-color: rgb(252, 243, 230);
+  background-color: rgb(50, 48, 44);
   min-height: 35vh;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,8 @@
 }
 
 body {
-  background-color: rgb(255, 241, 219);
+  background-color: rgb(50, 48, 44);
+  color: whitesmoke;
 }
 
 h3 {
@@ -36,80 +37,135 @@ h3 {
   font-weight: bold;
 }
 
-table, th, td {
-  background-color: lavender;
-  outline: 1px solid black;
-  text-align: left;
-  padding: .25em;
-}
-
 .brainstorm-table {
   display: flex;
   flex-direction: column;
 }
 
-.tune-row {
-  display: flex;
-  background-color: lavender;
-  border: 1px solid black;
-}
-
-.tune-row-expand {
-  display: flex;
-  background-color: lavender;
-  border: 1px solid black;
-  height: 12em;
-}
-
 .tune-cell {
   padding: 8px;
   margin-right: 8px;
-  display: flex;
   align-items: flex-start;
   vertical-align: top;
+  background-color: rgb(50, 48, 44);
+  border-radius: 5px;
 }
 
-.tune-divider {
-  height: 2em;
-  width: 2px;
-  border-left: 1px solid gray;
-  display: flex;
+.search-utility {
+  grid-column: auto / span 2;
 }
 
-.tune-details {
-  flex: 1;
-  flex-direction: column;
+.sort-utility {
+  grid-column: auto / span 3;
+}
+
+.tune-row {
+  display: grid;
+  padding: 8px;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  background-color: rgb(47, 26, 69);
+  border: 1px solid whitesmoke;
 }
 
 .tune-name {
-  flex: 1;
+  grid-column: auto / span 1;
   white-space: nowrap;
   overflow: hidden;
 }
 
 .tune-streaming-links {
-  flex: 1;
-}
-
-.tune-description {
-  flex: 2;
+  grid-column: auto / span 1;
   white-space: nowrap;
   overflow: hidden;
 }
 
-.tune-description-expand {
-  flex: 2;
-  overflow-y: scroll;
+.tune-description {
+  grid-column: auto / span 2;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .tune-endorsements {
-  flex: 0.5;
+  grid-column: auto / span 0.5;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.circle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  margin-right: 5px;
+  background-color: #ba9b3b;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.tune-row-expand {
+  height: 12em;
+}
+
+.tune-details-expand {
+  grid-column: auto / span 2;
+}
+
+.tune-details-edit {
+  grid-column: auto / span 2;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-content: start;
+}
+
+
+input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 10px;
+}
+
+.add-url-button {
+  width: 100%;
+  background-color: rgb(47, 26, 69);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.add-url-button:hover {
+  background-color: #1ED760;
+}
+
+.remove-url-button {
+  justify-self: end;
+  background-color: rgb(47, 26, 69);
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  width: 2em;
+  height: 2em;
+}
+
+.remove-url-button:hover {
+  background-color: #FF4136;
+}
+
+.tune-description-expand {
+  grid-column: auto / span 3;
+  overflow-y: scroll;
 }
 
 .tune-actions {
-  flex: 1;
-  justify-content: flex-end;
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  grid-column: auto / span 1;
+  background-color: rgb(47, 26, 69);
+  border: 1px solid whitesmoke;
 }
 
 .tune-actions button {
@@ -118,44 +174,18 @@ table, th, td {
 
 .streaming-link {
   color: inherit;
-  color: blue;
+  color: rgb(140, 140, 255);
   text-decoration: underline;
   text-transform: capitalize;
 }
 
+textarea {
+  width: 100%;
+  height: 100%;
+}
+
 .dot {
   margin: 0 4px;
-}
-
-form {
-  background-color: lavender;
-  outline: 1px solid black;
-  margin-bottom: 1em;
-  padding: 1em;
-  width: fit-content;
-}
-
-.form-content {
-  display: grid;
-  grid-template-columns: max-content auto max-content;
-  gap: .5em;
-}
-
-form span.responseMsg {
-  grid-column: 1 / 2;
-  grid-row: 1;
-  text-align: left;
-}
-
-form label {
-  grid-column: 1 / 2;
-  text-align: left;
-}
-
-form input[type="text"] {
-  grid-column: 1 / 2;
-  text-align: left;
-  width: 100%;
 }
 
 .add-spotify-current-button {
@@ -175,33 +205,6 @@ form input[type="text"] {
   background-color: #1ED760;
 }
 
-.add-url-button {
-  grid-column: 1 / 2;
-  width: 100%;
-  background-color: #808080;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-
-.add-url-button:hover {
-  background-color: #1ED760;
-}
-
-.remove-url-button {
-  grid-column: 2 / 3;
-  background-color: #808080;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-  width: 2em;
-  height: 2em;
-}
-
-.remove-url-button:hover {
-  background-color: #FF4136;
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -212,7 +215,7 @@ form input[type="text"] {
 }
 
 .tab-list {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid whitesmoke;
   padding-left: 0;
 }
 
@@ -224,8 +227,8 @@ form input[type="text"] {
 }
 
 .tab-list-active {
-  background-color: lavender;
-  border: solid black;
+  background-color: rgb(47, 26, 69);
+  border: solid whitesmoke;
   border-width: 1px 1px 0 1px;
 }
 

@@ -7,6 +7,13 @@ const api = axios.create({
 
 export const insertTune = payload => api.post(`/tune`, payload);
 export const getAllTunes = () => api.get(`/tunes`);
-export const updateTuneById = (id, payload) => api.put(`/tune/${id}`, payload);
+export const updateTuneById = (id, payload) =>
+  api
+    .put(`/tune/${id}`, payload)
+    .then((response) => response.data)
+    .catch((error) => {
+      const errorMessage = error.response?.data?.message || 'Tune update failed';
+      throw new Error(errorMessage);
+    });
 export const deleteTuneById = id => api.delete(`/tune/${id}`);
 export const getTuneById = id => api.get(`/tune/${id}`);
