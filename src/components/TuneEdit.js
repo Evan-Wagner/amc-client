@@ -72,7 +72,7 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
             />
             <input
               type="button"
-              className="remove-url-button"
+              className="button-primary remove-url-button"
               value="-"
               onClick={() => removeUrlInput(index)}
             />
@@ -81,7 +81,7 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
         {urls.length === 0 ? null : <div />}
         {urls.length < 6 ? <input
           type="button"
-          className="add-url-button"
+          className="button-primary add-url-button"
           value={urls.length === 0 ? 'Paste streaming link(s)' : '+'}
           onClick={addUrlInput}
         /> : ''}

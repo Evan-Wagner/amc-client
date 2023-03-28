@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import env from 'react-dotenv';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import '../App.css';
+import '../styles/App.css';
 
 import { routes } from '../pages';
 
@@ -22,10 +22,10 @@ const Navigation = () => {
   );
 };
 
-const Header = ({ token, setToken }) => {
+const Header = ({ token, setToken, theme, setTheme }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   useEffect(() => {
     const hash = window.location.hash;
     let token = window.localStorage.getItem("token");
@@ -47,9 +47,19 @@ const Header = ({ token, setToken }) => {
     window.location.href = `https://accounts.spotify.com/authorize?client_id=${env.SPOTIFY_CLIENT_ID}&redirect_uri=${redirect_uri}/spotify-callback&response_type=token&scope=user-top-read user-read-currently-playing`;
   };
 
+  const handleThemeChange = (event) => {
+    setTheme(event.target.value);
+  };
+
   return (
-    <header className="App-header">
+    <header className={`App-header`}>
       <Navigation />
+      <div className="theme-dropdown">
+        <select value={theme} onChange={handleThemeChange}>
+          <option value="theme-spotify-purple">Spotify Purple</option>
+          <option value="theme-fender-red">Fender Red</option>
+        </select>
+      </div>
       <h1>Async Music Collab</h1>
       <button
         className={authorized ? "authorize-button authorized" : "authorize-button"}

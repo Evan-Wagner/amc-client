@@ -1,10 +1,15 @@
+
+@import "./themes.css";
+
 .App {
+  height: 100%;
   padding: 1em;
+  background-color: var(--color-secondary);
 }
 
 .App-header {
   text-align: center;
-  background-color: rgb(47, 26, 69);
+  background-color: var(--color-primary);
   padding: 1em;
   height: fit-content;
   display: flex;
@@ -12,12 +17,13 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: whitesmoke;
-  outline: 1px solid whitesmoke;
+  color: var(--font-color-primary);
+  outline: 1px solid var(--line-color);
 }
 
 .App-body {
-  background-color: rgb(50, 48, 44);
+  background-color: var(--color-secondary);
+  color: var(--font-color-secondary);
   min-height: 35vh;
   display: flex;
   flex-direction: column;
@@ -28,13 +34,35 @@
 }
 
 body {
-  background-color: rgb(50, 48, 44);
-  color: whitesmoke;
+  background-color: var(--color-secondary);
+  color: var(--font-color-secondary);
+}
+
+h2 {
+  color: var(--font-color-secondary);
 }
 
 h3 {
   text-align: left;
   font-weight: bold;
+}
+
+a:link {
+  color: var(--link-color);
+}
+
+a:visited {
+  color: var(--link-color);
+}
+
+.button-primary {
+  background-color: var(--color-primary);
+  color: var(--font-color-primary);
+}
+
+.button-secondary {
+  background-color: var(--color-secondary);
+  color: var(--font-color-secondary);
 }
 
 .brainstorm-table {
@@ -47,7 +75,8 @@ h3 {
   margin-right: 8px;
   align-items: flex-start;
   vertical-align: top;
-  background-color: rgb(50, 48, 44);
+  background-color: var(--color-secondary);
+  color: var(--font-color-secondary);
   border-radius: 5px;
 }
 
@@ -63,8 +92,8 @@ h3 {
   display: grid;
   padding: 8px;
   grid-template-columns: repeat(6, minmax(150px, 1fr));
-  background-color: rgb(47, 26, 69);
-  border: 1px solid whitesmoke;
+  background-color: var(--color-primary);
+  border: 1px solid var(--line-color);
 }
 
 .tune-name {
@@ -100,7 +129,7 @@ h3 {
   border-radius: 50%;
   margin-right: 5px;
   background-color: #ba9b3b;
-  color: white;
+  color: whitesmoke;
   font-size: 20px;
   font-weight: bold;
 }
@@ -129,8 +158,6 @@ input[type="text"] {
 
 .add-url-button {
   width: 100%;
-  background-color: rgb(47, 26, 69);
-  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
 }
@@ -141,8 +168,6 @@ input[type="text"] {
 
 .remove-url-button {
   justify-self: end;
-  background-color: rgb(47, 26, 69);
-  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
   width: 2em;
@@ -164,11 +189,13 @@ input[type="text"] {
   align-items: flex-end;
   justify-content: flex-start;
   grid-column: auto / span 1;
-  background-color: rgb(47, 26, 69);
-  border: 1px solid whitesmoke;
+  background-color: var(--color-primary);
+  border: 1px solid var(--line-color);
 }
 
 .tune-actions button {
+  background-color: var(--color-secondary);
+  color: var(--font-color-secondary);
   margin-bottom: 8px;
 }
 
@@ -196,7 +223,7 @@ textarea {
   border: none;
   border-radius: 10px;
   background-color: #1DB954;
-  color: white;
+  color: whitesmoke;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
@@ -215,11 +242,12 @@ textarea {
 }
 
 .tab-list {
-  border-bottom: 1px solid whitesmoke;
+  border-bottom: 1px solid var(--line-color);
   padding-left: 0;
 }
 
 .tab-list-item {
+  color: var(--font-color-secondary);
   display: inline-block;
   list-style: none;
   margin-bottom: -1px;
@@ -227,8 +255,9 @@ textarea {
 }
 
 .tab-list-active {
-  background-color: rgb(47, 26, 69);
-  border: solid whitesmoke;
+  background-color: var(--color-primary);
+  color: var(--font-color-primary);
+  border: solid var(--line-color);
   border-width: 1px 1px 0 1px;
 }
 
