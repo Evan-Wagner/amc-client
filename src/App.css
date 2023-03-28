@@ -4,16 +4,26 @@
 
 .App-header {
   text-align: center;
-  background-color: rgb(47, 26, 69);
-  padding: 1em;
-  height: fit-content;
+  position: relative;
+  background: rgb(0,0,0);
+  padding: 2em;
+  margin: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: whitesmoke;
-  outline: 1px solid whitesmoke;
+  border-top: 1px solid rgba(154, 255, 136, 0.75);
+  border-right: 1px solid rgba(154, 255, 136, 0.75);
+  border-bottom: 1px solid rgba(154, 255, 136, 0.75);
+  border-left: 1px solid rgba(154, 255, 136, 0.75);
+  border-radius: 2px;
+}
+
+h1 {
+  font-size: 72px;
+  background: -webkit-linear-gradient(0deg, rgba(9,76,196,1) 0%, rgba(61,168,135,1) 29%, rgba(149,58,128,1) 56%, rgba(92,85,202,1) 77%, rgba(253,187,45,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .App-body {
@@ -240,7 +250,6 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 20px;
 }
 
 .navigation ul {
@@ -256,6 +265,7 @@ textarea {
 
 .navigation a {
   text-decoration: none;
+  color: #e5e7eb;
 }
 
 .navigation a:hover {
@@ -297,4 +307,139 @@ textarea {
   border-radius: 10px;
   background-color: #2ecc71;
   color: white;
+}
+
+.top, .bottom, .right, .left {
+  position: absolute;
+  border-radius: 100vmax;
+}
+
+.top {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    transparent 50%,
+    rgba(7, 135, 39, 0.75),
+    rgb(158, 217, 130)
+  );
+}
+
+.bottom {
+  right: 0;
+  bottom: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg,
+    rgb(58, 217, 130),
+    rgba(7, 135, 39, 0.75),
+    transparent 50%
+  );
+}
+
+.right {
+  top: 0;
+  right: 0;
+  width: 5px;
+  height: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 30%,
+    rgba(7, 135, 39, 0.75),
+    rgb(58, 217, 130)
+  );
+}
+
+.left {
+  left: 0;
+  bottom: 0;
+  width: 5px;
+  height: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(58, 217, 130),
+    rgba(7, 135, 39, 0.75),
+    transparent 70%
+  );
+}
+
+.top {
+  animation: animateTop 3s ease-in-out infinite;
+}
+
+.bottom {
+  animation: animateBottom 3s ease-in-out infinite;
+}
+
+.right {
+  animation: animateRight 3s ease-in-out infinite;
+}
+
+.left {
+  animation: animateLeft 3s ease-in-out infinite;
+}
+
+@keyframes animateTop {
+  25% {
+    width: 100%;
+    opacity: 1;
+  }
+
+  30%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes animateBottom {
+  0%,
+  50% {
+    opacity: 0;
+    width: 0;
+  }
+
+  75% {
+    opacity: 1;
+    width: 100%;
+  }
+
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes animateRight {
+  0%,
+  25% {
+    opacity: 0;
+    height: 0;
+  }
+
+  50% {
+    opacity: 1;
+    height: 100%;
+  }
+
+  55%,
+  100% {
+    height: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes animateLeft {
+  0%,
+  75% {
+    opacity: 0;
+    bottom: 0;
+    height: 0;
+  }
+
+  100% {
+    opacity: 1;
+    height: 100%;
+  }
 }

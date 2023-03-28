@@ -58,6 +58,10 @@ const Header = ({ token, setToken }) => {
       >
         {authorized ? "✓ Spotify Authorized" : "Authorize Spotify"}
       </button>
+      <span class="top"></span>
+      <span class="right"></span>
+      <span class="bottom"></span>
+      <span class="left"></span>
     </header>
   );
 };
