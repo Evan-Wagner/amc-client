@@ -9,7 +9,8 @@ import Header from './components/Header';
 function App() {
   const [token, setToken] = useState("");
 
-  const [theme, setTheme] = useState('theme-spotify-purple');
+  const [theme, setTheme] = useState("theme-spotify-purple");
+
 
   return (
     <Router>

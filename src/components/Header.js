@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import env from 'react-dotenv';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import '../styles/App.css';
+import '../styles/themes.css';
 
 import { routes } from '../pages';
 
@@ -39,6 +40,17 @@ const Header = ({ token, setToken, theme, setTheme }) => {
     }
   }, [navigate, setToken, location]);
 
+  const [themeNames, setThemeNames] = useState([]);
+
+  useEffect(() => {
+    const cssRules = document.styleSheets[0].cssRules;
+    const array = Array.from(cssRules);
+    const themeRules = array.filter(rule => rule.selectorText && rule.selectorText.startsWith('.theme-'));
+    const themes = themeRules.map(rule => rule.selectorText.substring('.theme-'.length));
+
+    setThemeNames(themes);
+  }, [])
+
   const authorized = Boolean(token);
 
   const handleAuthorize = () => {
@@ -55,9 +67,10 @@ const Header = ({ token, setToken, theme, setTheme }) => {
     <header className={`App-header`}>
       <Navigation />
       <div className="theme-dropdown">
-        <select classname="button-secondary" value={theme} onChange={handleThemeChange}>
-          <option value="theme-spotify-purple">Spotify Purple</option>
-          <option value="theme-fender-red">Fender Red</option>
+        <select value={theme} onChange={handleThemeChange}>
+        {themeNames.map(themeName => (
+            <option key={themeName} value={`theme-${themeName}`}>{themeName}</option>
+          ))}
         </select>
       </div>
       <h1>Async Music Collab</h1>
@@ -68,6 +81,10 @@ const Header = ({ token, setToken, theme, setTheme }) => {
       >
         {authorized ? "✓ Spotify Authorized" : "Authorize Spotify"}
       </button>
+      <span class="top"></span>
+      <span class="right"></span>
+      <span class="bottom"></span>
+      <span class="left"></span>
     </header>
   );
 };

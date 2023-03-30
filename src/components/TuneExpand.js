@@ -1,6 +1,8 @@
 import React from 'react';
 
 const TuneExpand = ({ record, handleEdit, handleDelete, handleCollapse}) => {
+  const endorsements = record.endorsements.map(str => str.charAt(0).toUpperCase() + str.slice(1,2));
+  
   return (
     <div className="tune-row tune-row-expand" >
       <div className="tune-cell tune-details-expand">
@@ -18,7 +20,13 @@ const TuneExpand = ({ record, handleEdit, handleDelete, handleCollapse}) => {
             <br />
         </React.Fragment>
         ))}
-        {record.endorsements}
+        <div className="tune-cell tune-endorsements">
+          {endorsements.map((str, index) => (
+            <div className="circle" key={index}>
+              {str}
+            </div>
+          ))}
+        </div>
       </div>
       <div className="tune-cell tune-description-expand">
         {record.description}

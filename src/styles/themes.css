@@ -1,17 +1,29 @@
 .theme-spotify-purple {
-    --color-primary: rgb(47, 26, 69);
-    --color-secondary: rgb(50, 48, 44);
-    --font-color-primary: whitesmoke;
-    --font-color-secondary: whitesmoke;
-    --line-color: whitesmoke;
-    --link-color: rgb(198, 156, 244);
-  }
+  --color-primary: rgb(47, 26, 69);
+  --color-secondary: rgb(50, 48, 44);
+  --font-color-primary: whitesmoke;
+  --font-color-secondary: whitesmoke;
+  --line-color-light: whitesmoke;
+  --line-color-dark: whitesmoke;
+  --link-color: rgb(198, 156, 244);
+}
   
-  .theme-fender-red {
-    --color-primary: rgb(146, 31, 54);
-    --color-secondary: rgb(255, 230, 180);
-    --font-color-primary: whitesmoke;
-    --font-color-secondary: black;
-    --line-color: black;
-    --link-color: rgb(230, 106, 131);
-  }
+.theme-fender-red {
+  --color-primary: rgb(146, 31, 54);
+  --color-secondary: rgb(255, 230, 180);
+  --font-color-primary: whitesmoke;
+  --font-color-secondary: black;
+  --line-color-light: rgb(211, 166, 42);
+  --line-color-dark: rgb(170, 134, 34);
+  --link-color: rgb(230, 106, 131);
+}
+
+.theme-jza-rainbow {
+  --color-primary: black;
+  --color-secondary: black;
+  --font-color-primary: -webkit-linear-gradient(0deg, rgba(9,76,196,1) 0%, rgba(61,168,135,1) 29%, rgba(149,58,128,1) 56%, rgba(92,85,202,1) 77%, rgba(253,187,45,1) 100%);
+  --font-color-secondary: whitesmoke;
+  --line-color-light: rgba(154, 255, 136, 0.75);
+  --line-color-dark: rgba(7, 135, 39, 0.75);
+  --link-color: whitesmoke;
+}
