@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Tune = ({ record, handleEdit, handleDelete, handleExpand }) => {
+const TuneCompact = ({ record, handleEdit, handleDelete, handleExpand }) => {
   // Capitalize the first letter of each endorsement
   const endorsements = record.endorsements.map(str => str.charAt(0).toUpperCase() + str.slice(1,2));
   
@@ -45,4 +45,4 @@ const Tune = ({ record, handleEdit, handleDelete, handleExpand }) => {
   );
 };
 
-export default Tune;
+export default TuneCompact;

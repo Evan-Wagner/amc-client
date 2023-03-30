@@ -33,7 +33,9 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
         const json = await getSpotifyCurrentTrack(token);
         if (json) {
           setUrls([...urls, [json.item.external_urls.spotify, 'spotify']]);
-          setName(json.item.name);
+          if (name === "") {
+            setName(json.item.name);
+          }
         }
       } catch (err) {
         setSaveMsg(""+err);
@@ -96,7 +98,7 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
         <div>
           <button onClick={handleSaveClick}>Save</button>
           {recordId ? <button onClick={() => handleDelete(recordId)}>Delete</button> : null}
-          <button onClick={() => handleCollapse(recordId)}>Collapse</button>
+          <button onClick={() => handleCollapse(recordId)}>Cancel</button>
         </div>
         <input
           type="button"

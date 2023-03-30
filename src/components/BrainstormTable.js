@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Tune from './Tune';
+import TuneCompact from './TuneCompact';
 import TuneExpand from './TuneExpand';
 import TuneEdit from './TuneEdit';
 
@@ -56,12 +56,12 @@ const BrainstormTable = ({ token }) => {
   };
 
   const UtilityBar = () => (
-    <div className="tune-row">
+    <div className="utility-bar">
       <div className="tune-cell search-utility">
-        search
+        SEARCH
       </div>
       <div className="tune-cell sort-utility">
-        sort
+        SORT
       </div>
       <div className="tune-cell tune-actions">
       <button onClick={() => handleEdit("new")}>Add new</button>
@@ -108,7 +108,7 @@ const BrainstormTable = ({ token }) => {
               );
             } else {
               return (
-                <Tune
+                <TuneCompact
                   key={record._id}
                   record={record}
                   handleEdit={handleEdit}
