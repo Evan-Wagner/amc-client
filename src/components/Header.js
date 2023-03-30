@@ -26,7 +26,7 @@ const Navigation = () => {
 const Header = ({ token, setToken, theme, setTheme }) => {
   const navigate = useNavigate();
   const location = useLocation();
-
+  
   useEffect(() => {
     const hash = window.location.hash;
     let token = window.localStorage.getItem("token");
