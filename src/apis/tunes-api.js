@@ -2,7 +2,7 @@ import axios from 'axios';
 import env from 'react-dotenv';
 
 const api = axios.create({
-    baseURL: env.REACT_ENV === 'dev' ? `http://localhost:${env.SERVER_PORT}/api` : `https://amc-server.vercel.app/api`,
+    baseURL: env.REACT_ENV === 'dev' ? `http://localhost:${env.SERVER_PORT}/api` : `http://3.141.170.90/api`,
 });
 
 export const insertTune = payload => api.post(`/tune`, payload);
