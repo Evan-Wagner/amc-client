@@ -20,6 +20,9 @@ const TuneExpand = ({ record, handleEdit, handleDelete, handleCollapse}) => {
             <br />
         </React.Fragment>
         ))}
+      </div>
+      <div className="tune-cell tune-description-expand">
+        {record.description}
         <div className="tune-cell tune-endorsements">
           {endorsements.map((str, index) => (
             <div className="circle" key={index}>
@@ -27,9 +30,6 @@ const TuneExpand = ({ record, handleEdit, handleDelete, handleCollapse}) => {
             </div>
           ))}
         </div>
-      </div>
-      <div className="tune-cell tune-description-expand">
-        {record.description}
       </div>
       <div className="tune-cell tune-actions">
         <div>
