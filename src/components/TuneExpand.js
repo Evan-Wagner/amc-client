@@ -7,15 +7,15 @@ const TuneExpand = ({ record, handleEdit, handleDelete, handleCollapse}) => {
     <div className="tune-row tune-row-expand" >
       <div className="tune-cell tune-details-expand">
         <h3>{record.name}</h3>
-        {record.streamingUrls.map((urlTuple, index) => (
+        {record.tracks.map((track, index) => (
         <React.Fragment key={index}>
             <a
             className="streaming-link"
-            href={urlTuple[0]}
+            href={track.url}
             target="_blank"
             rel="noreferrer"
             >
-            {urlTuple[1]}
+            {track.source+" – "+track.title}
             </a>
             <br />
         </React.Fragment>

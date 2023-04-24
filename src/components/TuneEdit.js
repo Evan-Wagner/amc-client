@@ -5,35 +5,40 @@ import { getSpotifyCurrentTrack, parseStreamingSource } from '../streamingUtils'
 const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) => {
   const recordId = record ? record._id : null;
   const [name, setName] = useState(record ? record.name : "");
-  const [urls, setUrls] = useState(record ? record.streamingUrls : []);
+  const [tracks, setTracks] = useState(record ? record.tracks : []);
   const [description, setDescription] = useState(record ? record.description : "");
   const [saveMsg, setSaveMsg] = useState("");
 
-  const handleUrlChange = (index, event) => {
-    const updatedUrls = urls.map((url, i) => (i === index ? [event.target.value, parseStreamingSource(event.target.value)] : url));
-    setUrls(updatedUrls);
+  const handleTrackChange = (index, event) => {
+    const updatedTracks = tracks.map((track, i) => (i === index ? ({
+      'url': event.target.value,
+      'source': parseStreamingSource(event.target.value)
+     }) : track));
+    setTracks(updatedTracks);
   };
 
   const addUrlInput = () => {
-    if (urls.length < 6) {
-      setUrls([...urls, ['','']]);
+    if (tracks.length < 6) {
+      setTracks([...tracks, {}]);
     }
   };
   
   const removeUrlInput = (index) => {
-    const newUrls = urls.filter((_, i) => i !== index);
-    setUrls(newUrls);
+    const newUrls = tracks.filter((_, i) => i !== index);
+    setTracks(newUrls);
   };
 
-  const addSpotifyCurrentTrack = async () => {
+const addSpotifyCurrentTrack = async () => {
     if (token === '') {
       setSaveMsg('Please authenticate Spotify.');
     } else {
       try {
-        const json = await getSpotifyCurrentTrack(token);
-        if (json) {
-          setUrls([...urls, [json.item.external_urls.spotify, 'spotify']]);
-          setName(json.item.name);
+        const track = await getSpotifyCurrentTrack(token);
+        if (track) {
+          setTracks([...tracks, track]);
+          if (name === "") {
+            setName(track.title);
+          }
         }
       } catch (err) {
         setSaveMsg(""+err);
@@ -42,7 +47,7 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
   };
 
   const handleSaveClick = () => {
-    handleSave({ ...record, name: name, streamingUrls: urls.filter(url => url[0] !== ""), description: description })
+    handleSave({ ...record, name: name, tracks: tracks.filter(track => track.url !== ""), description: description })
       .then(() => {
         setSaveMsg('Tune saved successfully.');
       })
@@ -61,14 +66,14 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
           onChange={(event) => setName(event.target.value)}
         />
         <div />
-        Link(s)
-        {urls.map((url, index) => (
+        Track Link(s)
+        {tracks.map((url, index) => (
           <React.Fragment>
             {index > 0 ? <div /> : null}
             <input
               type="text"
-              value={url[0]}
-              onChange={(event) => handleUrlChange(index, event)}
+              value={url.url}
+              onChange={(event) => handleTrackChange(index, event)}
             />
             <input
               type="button"
@@ -78,11 +83,11 @@ const TuneEdit = ({ record, handleSave, handleDelete, handleCollapse, token }) =
             />
           </React.Fragment>
         ))}
-        {urls.length === 0 ? null : <div />}
-        {urls.length < 6 ? <input
+        {tracks.length === 0 ? null : <div />}
+        {tracks.length < 6 ? <input
           type="button"
           className="button-primary add-url-button"
-          value={urls.length === 0 ? 'Paste streaming link(s)' : '+'}
+          value={tracks.length === 0 ? 'Paste track link(s)' : '+'}
           onClick={addUrlInput}
         /> : ''}
       </div>

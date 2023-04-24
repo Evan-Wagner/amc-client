@@ -10,7 +10,6 @@ export const parseStreamingSource = (url) => {
         return 'unknown';
     }
 };
-  
 
 export const getSpotifyTrack = async (trackId, token) => {
     const url = `https://api.spotify.com/v1/tracks/${trackId}`;
@@ -19,18 +18,25 @@ export const getSpotifyTrack = async (trackId, token) => {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+            'Content-Type': 'application/json',
+        },
     });
-    
+
     if (!response.ok) {
         throw new Error(await response.text());
     }
 
-    return await response.json();
-}
+    const jsonResponse = await response.json();
+    return {
+        title: jsonResponse.name,
+        url: jsonResponse.external_urls.spotify,
+        source: 'spotify',
+        imageUrl: jsonResponse.album.images[0].url,
+    };
+};
 
-export const getSpotifyCurrentTrack = async (token) => {
+
+  export const getSpotifyCurrentTrack = async (token) => {
     const url = `https://api.spotify.com/v1/me/player/currently-playing`;
 
     const response = await fetch(url, {
@@ -47,8 +53,15 @@ export const getSpotifyCurrentTrack = async (token) => {
         throw new Error('Could not find a currently playing track.')
     }
 
-    return await response.json();
-}
+    const jsonResponse = await response.json();
+    return {
+        title: jsonResponse.item.name,
+        url: jsonResponse.item.external_urls.spotify,
+        source: 'spotify',
+        imageUrl: jsonResponse.item.album.images[0].url,
+    };
+};
+
 
 export const parseSpotifyTrackIdFromUrl = (url) => {
     if (!url) {
@@ -63,4 +76,4 @@ export const parseSpotifyTrackIdFromUrl = (url) => {
     }
 
     return match[1];
-}
+};

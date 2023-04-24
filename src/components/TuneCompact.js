@@ -10,17 +10,17 @@ const TuneCompact = ({ record, handleEdit, handleDelete, handleExpand }) => {
         {record.name}
       </div>
       <div className="tune-cell tune-streaming-links">
-        {record.streamingUrls.map((urlTuple, index) => (
+        {record.tracks.map((track, index) => (
           <React.Fragment key={index}>
             <a
               className="streaming-link"
-              href={urlTuple[0]}
+              href={track.url}
               target="_blank"
               rel="noreferrer"
             >
-              {urlTuple[1]}
+              {track.source}
             </a>
-            {index !== record.streamingUrls.length - 1 && (
+            {index !== record.tracks.length - 1 && (
               <span className="dot"> • </span>
             )}
           </React.Fragment>

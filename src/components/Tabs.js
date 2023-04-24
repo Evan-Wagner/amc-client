@@ -3,58 +3,44 @@ import PropTypes from 'prop-types';
 import Tab from './Tab';
 
 class Tabs extends Component {
-    static propTypes = {
-      children: PropTypes.instanceOf(Array).isRequired,
-    }
-  
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        activeTab: this.props.children[0].props.label,
-      };
-    }
-  
-    onClickTabItem = (tab) => {
-      this.setState({ activeTab: tab });
-    }
+  static propTypes = {
+    childrenArray: PropTypes.instanceOf(Array).isRequired,
+  };
 
-    render() {
-        const {
-            onClickTabItem,
-            props: {
-                children,
-            },
-            state: {
-                activeTab,
-            }
-        } = this;
+  onClickTabItem = (tab) => {
+    this.setState({ activeTab: tab });
+  };
 
-        return (
-            <div className="tabs">
-                <ol className="tab-list">
-                {children.map((child) => {
-                    const { label } = child.props;
+  render() {
+    const {
+      props: { childrenArray, activeTab, onClickTabItem },
+    } = this;
 
-                    return (
-                    <Tab
-                        activeTab={activeTab}
-                        key={label}
-                        label={label}
-                        onClick={onClickTabItem}
-                    />
-                    );
-                })}
-                </ol>
-                <div className="tab-content">
-                {children.map((child) => {
-                    if (child.props.label !== activeTab) return undefined;
-                    return child.props.children;
-                })}
-                </div>
-            </div>
-        );
-    } 
+    return (
+      <div className="tabs">
+        <ol className="tab-list">
+          {childrenArray.map((child) => {
+            const { label } = child.props;
+
+            return (
+              <Tab
+                activeTab={activeTab}
+                key={label}
+                label={label}
+                onClick={onClickTabItem}
+              />
+            );
+          })}
+        </ol>
+        <div className="tab-content">
+          {childrenArray.map((child) => {
+            if (child.props.label !== activeTab) return undefined;
+            return child.props.children;
+          })}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Tabs;

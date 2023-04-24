@@ -7,13 +7,6 @@ const api = axios.create({
 
 export const insertTune = payload => api.post(`/tunes`, payload);
 export const getAllTunes = () => api.get(`/tunes`);
-export const updateTuneById = (id, payload) =>
-  api
-    .put(`/tunes/${id}`, payload)
-    .then((response) => response.data)
-    .catch((error) => {
-      const errorMessage = error.response?.data?.message || 'Tune update failed';
-      throw new Error(errorMessage);
-    });
+export const updateTuneById = (id, payload) => api.put(`/tunes/${id}`, payload);
 export const deleteTuneById = id => api.delete(`/tunes/${id}`);
 export const getTuneById = id => api.get(`/tunes/${id}`);

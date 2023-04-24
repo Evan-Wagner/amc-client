@@ -80,7 +80,7 @@ a:visited {
   color: var(--font-color-secondary);
 }
 
-.brainstorm-table {
+.tune-table {
   display: flex;
   flex-direction: column;
 }

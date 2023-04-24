@@ -81,10 +81,10 @@ const Header = ({ token, setToken, theme, setTheme }) => {
       >
         {authorized ? "✓ Spotify Authorized" : "Authorize Spotify"}
       </button>
-      <span class="top"></span>
-      <span class="right"></span>
-      <span class="bottom"></span>
-      <span class="left"></span>
+      <span className="top"></span>
+      <span className="right"></span>
+      <span className="bottom"></span>
+      <span className="left"></span>
     </header>
   );
 };
